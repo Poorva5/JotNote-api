@@ -16,6 +16,32 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+AUTH_USER_MODEL = 'users.User'
+
+ADMINS = [("""poorva""", "poorva644@gmail.com")]
+
+MANAGERS = ADMINS
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '15.207.8.22']
+
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "poorvak455@gmail.com"
+EMAIL_HOST_PASSWORD = "tirmzvrbkrxwhaij"
+
+AUTHENTICATION_BACKENDS = (
+   "django.contrib.auth.backends.ModelBackend",
+   "allauth.account.auth_backends.AuthenticationBackend"
+)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -25,11 +51,31 @@ SECRET_KEY = "django-insecure-%qqi_0x9*8qj!e#4#a(x$tq2ye)-0w268pvhy&10f5_tqfog22
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 CORS_ALLOW_ALL_ORIGINS = True
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
+
+CSRF_COOKIE_HTTPONLY = False
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+ROOT_URLCONF = "jotnote.urls"
 
 # Application definition
 
@@ -40,10 +86,22 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "notes",
+    "users",
+
+    #third party apps
     "rest_framework",
     "corsheaders",
-    "notes",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth.registration",
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
