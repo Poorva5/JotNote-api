@@ -14,9 +14,16 @@ class MyNotes(APIView):
 
     def get(self, request, *args, **kwargs):
         notes_list = Note.objects.filter(users=request.user)
-        notes_serializer = NoteSerializer(notes_list, many=True)
-        return Response(notes_serializer.data, status=status.HTTP_200_OK)
-
+        pinned_notes_list = notes_list.filter(pin=True)
+        unpinned_notes_list = notes_list.filter(pin=False)
+        pinned_notes_serializer = NoteSerializer(pinned_notes_list, many=True)
+        unpinned_notes_serializer = NoteSerializer(unpinned_notes_list, many=True)
+        return Response(
+            {
+                'pinned_notes_list': pinned_notes_serializer.data,
+                'unpinned_notes_list': unpinned_notes_serializer.data
+            }
+        , status=status.HTTP_200_OK)
 class CreateNote(APIView):
     
     def post(self, request):
@@ -35,3 +42,13 @@ class CreateNote(APIView):
                 note_serialzier.errors, status=status.HTTP_400_BAD_REQUEST
             )
     
+class UpdatePinnedNote(APIView):
+
+    def put(self, request, pk):
+        note_instance = Note.objects.filter(id=pk).first()
+        data = {"pin": not note_instance.pin}
+        note_serializer = NoteSerializer(note_instance, data=data, partial=True)
+        note_serializer.is_valid(raise_exception=True)
+        note_serializer.save()
+        return Response(note_serializer.data, status=status.HTTP_200_OK)
+
