@@ -22,7 +22,7 @@ ADMINS = [("""poorva""", "poorva644@gmail.com")]
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '15.207.8.22']
+ALLOWED_HOSTS = ['*']
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
